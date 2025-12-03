@@ -1,0 +1,20 @@
+{
+  "name": "backendproject",
+  "version": "1.0.0",
+  "description": "A backend  project management application ",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node index.js"
+  },
+  "keywords": [
+    "Backend",
+    "API",
+    "creation"
+  ],
+  "author": "Deepanshu choudhary",
+  "license": "ISC",
+  "devDependencies": {
+    "prettier": "3.7.4"
+  }
+}
