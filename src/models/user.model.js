@@ -1,7 +1,8 @@
 import mongoose, { Schema } from "mongoose";
-import brcypt from "bcrypt";
+import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
+
 const userSchema = new Schema(
   {
     avatar: {
@@ -16,7 +17,7 @@ const userSchema = new Schema(
     },
     username: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
@@ -24,11 +25,10 @@ const userSchema = new Schema(
     },
     email: {
       type: String,
-      require: true,
+      required: true,
       unique: true,
       lowercase: true,
       trim: true,
-      index: true,
     },
     fullName: {
       type: String,
@@ -36,7 +36,7 @@ const userSchema = new Schema(
     },
     password: {
       type: String,
-      require: [true, "password is required"],
+      required: [true, "Password is required"],
     },
     isEmailVerified: {
       type: Boolean,
@@ -62,14 +62,15 @@ const userSchema = new Schema(
     timestamps: true,
   },
 );
-userSchema.pre("save", async function (next) {
-  if (!this.isModified("password")) return next();
-  this.password = await brcypt.hash(this.password, 10);
-  next();
+
+userSchema.pre("save", async function () {
+  if (!this.isModified("password"));
+
+  this.password = await bcrypt.hash(this.password, 10);
 });
 
 userSchema.methods.isPasswordCorrect = async function (password) {
-  return await brcypt.compare(password, this.password);
+  return await bcrypt.compare(password, this.password);
 };
 
 userSchema.methods.generateAccessToken = function () {
@@ -100,10 +101,10 @@ userSchema.methods.generateTemporaryToken = function () {
   const hashedToken = crypto
     .createHash("sha256")
     .update(unHashedToken)
-    .digest("hex")
+    .digest("hex");
 
-    const tokenExpiry = Date.now()+(20*60*1000)
-    return {unHashedToken,hashedToken,tokenExpiry}
+  const tokenExpiry = Date.now() + 20 * 60 * 1000; //20 mins
+  return { unHashedToken, hashedToken, tokenExpiry };
 };
 
 export const User = mongoose.model("User", userSchema);

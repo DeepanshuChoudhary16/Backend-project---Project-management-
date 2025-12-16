@@ -2,7 +2,7 @@ import Mailgen from "mailgen";
 import nodemailer from "nodemailer";
 
 const sendEmail = async (options) => {
-  new Mailgen({
+  const mailGenerator = new Mailgen({
     theme: "default",
     product: {
       name: "Task Manager",
@@ -10,8 +10,8 @@ const sendEmail = async (options) => {
     },
   });
 
-  const emailTextual = mailGenerator.generatePlaintext(option.mailgenContent);
-  const emailHTML = mailGenerator.generate(option.mailgenContent);
+  const emailTextual = mailGenerator.generatePlaintext(options.mailgenContent);
+  const emailHTML = mailGenerator.generate(options.mailgenContent);
 
   const transpoter = nodemailer.createTransport({
     host: process.env.MAILTRAP_SMTP_HOST,
@@ -30,7 +30,7 @@ const sendEmail = async (options) => {
     html: emailHTML,
   };
   try {
-    await transpoter.sendMail(mailgenContent);
+    await transpoter.sendMail(mail);
   } catch (error) {
     console.error("Email service failed siliendly");
   }
